@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: shodan-api
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app --bind 0.0.0.0:8080
+    envVars:
+      - key: SHODAN_API_KEY
+        sync: false
