@@ -1,8 +1,10 @@
+from flask_cors import CORS
 from flask import Flask, request, jsonify
 import shodan
 import os
 
 app = Flask(__name__)
+CORS(app)
 SHODAN_API_KEY = os.getenv("SHODAN_API_KEY")
 api = shodan.Shodan(SHODAN_API_KEY)
 
@@ -23,6 +25,11 @@ def search():
         return jsonify(results)
     except shodan.APIError as e:
         return jsonify({"error": str(e)}), 400
+
+@app.route("/openapi.json")
+def openapi_spec():
+    from flask import send_from_directory
+    return send_from_directory('.', 'openapi.json', mimetype='application/json')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
